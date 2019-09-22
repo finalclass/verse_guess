@@ -1,0 +1,12 @@
+<p>
+  Zalogowany jako: <%= @player_name %>
+</p>
+
+<ul>
+  <li>
+    <a href="/new-game">Nowa gra</a>
+  </li>
+  <li>
+    <a href="/join-game">Dołącz do gry</a>  
+  </li>
+</ul>

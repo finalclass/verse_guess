@@ -1,0 +1,4 @@
+<%= form_for @conn, Routes.page_path(@conn, :set_player_name), fn f -> %>
+  <%= text_input f, :player_name, placeholder: "gracz..." %>
+  <%= submit "Ustaw nazwę gracza" %>
+<% end %>
