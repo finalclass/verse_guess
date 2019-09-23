@@ -31,6 +31,14 @@ defmodule VerseGuess.Game do
     GenServer.call(game_pid, {:get_verse_text})
   end
 
+  def get_options(game_pid) do
+    GenServer.call(game_pid, {:get_options})
+  end
+
+  def next_guess(game_pid) do
+    GenServer.call(game_pid, {:next_guess})
+  end
+
   def handle_call({:add_player, player_pid, player_name}, _from, state) do
     players = Map.get(state, :players)
     players = [{player_pid, player_name} | players]
@@ -50,6 +58,7 @@ defmodule VerseGuess.Game do
     |> Map.put(:chapter_number, Map.get(verse, :chapter_number))
     |> Map.put(:verse_number, Map.get(verse, :verse_number))
     |> Map.put(:verse_text, verse_text)
+    |> Map.put(:possible_answers, Map.get(verse, :possible_answers))
 
     {:reply, verse_text, state}
   end
@@ -57,5 +66,15 @@ defmodule VerseGuess.Game do
   def handle_call({:get_verse_text}, _from, state) do
     verse_text = Map.get(state, :verse_text)
     {:reply, verse_text, state}
+  end
+
+  def handle_call({:get_options}, _from, state) do
+    ans = Map.get(state, :possible_answers)
+    {:reply, ans, state}
+  end
+
+  def handle_call({:next_guess}, _from, state) do
+    state = Map.put(state, :possible_answers, ["Prawo", "Pisma", "Prorocy"])
+    {:reply, :ok, state)
   end
 end

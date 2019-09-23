@@ -19,12 +19,19 @@ defmodule VerseGuess.Bible do
   def get_random_verse() do
     {:ok, %{body: body}} = @http_client.get(@random_verse_url)
     parsed = Poison.Parser.parse!(body, %{})
-    %{
+    verse = %{
       encoded_book_name: Map.get(parsed, "book"),
       chapter_number: Map.get(parsed, "chapter_number"),
       verse_number: Map.get(parsed, "verse_number"),
-      verse_text: Map.get(parsed, "verse_text")
+      verse_text: Map.get(parsed, "verse_text"),
+      max_chapters: Map.get(parsed, "max_chapters"),
+      max_verses: Map.get(parsed, "max_verses"),
     }
+    verse = Map.put(verse, :possible_answers, build_possible_answers(verse))
+  end
+
+  def build_possible_answers(verse) do
+    :ok
   end
   
 end
