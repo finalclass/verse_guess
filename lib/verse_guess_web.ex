@@ -23,6 +23,7 @@ defmodule VerseGuessWeb do
 
       import Plug.Conn
       import VerseGuessWeb.Gettext
+      import VerseGuessWeb.Controllers.Helpers
       alias VerseGuessWeb.Router.Helpers, as: Routes
     end
   end

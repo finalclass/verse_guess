@@ -3,20 +3,11 @@ defmodule VerseGuessWeb.PageController do
   alias VerseGuess.Player
 
   def index(conn, _params) do
-    player =
-      conn
-      |> fetch_session()
-      |> get_session(:player)
-
-    ensure_player(conn, {player, Process.alive?(player)})
+    ensure_player(conn, get_player_pid(conn))
   end
 
-  defp ensure_player(conn, {nil, false}), do: render(conn, "new_player_form.html")
-  defp ensure_player(conn, {player, false}), do: ensure_player(conn, {nil, false})
-
-  defp ensure_player(conn, {player, true}) do
-    IO.inspect(player)
-
+  defp ensure_player(conn, nil), do: render(conn, "new_player_form.html")
+  defp ensure_player(conn, player) do
     conn
     |> assign(:player_name, Player.get_name(player))
     |> render("main_menu.html")

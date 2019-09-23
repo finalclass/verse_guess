@@ -4,7 +4,7 @@
 
 <ul>
   <li>
-    <a href="/new-game">Nowa gra</a>
+    <%= link("Nowa gra", to: Routes.game_path(@conn, :new)) %>
   </li>
   <li>
     <a href="/join-game">Dołącz do gry</a>  

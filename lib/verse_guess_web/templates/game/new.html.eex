@@ -1,5 +1,12 @@
-<h1>
-  <%= @verse_text %>
-</h1>
+<p>
+  Players:
+</p>
 
+<ul>
+  <%= for player <- @players do %>
+    <li>
+      <%= player %>
+    </li>
+  <% end %>
+</ul>
 

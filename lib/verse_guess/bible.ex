@@ -12,8 +12,7 @@ defmodule VerseGuess.Bible do
 
   """
   def get_random_verse() do
-    result = @http_client.get(@random_verse_url)
-    IO.inspect(result)
+    _result = @http_client.get(@random_verse_url)
     :ok
   end
   
