@@ -20,7 +20,8 @@ defmodule VerseGuessWeb.Router do
     post "/player-name", PageController, :set_player_name
 
     get "/game/start", GameController, :new
-    get "/game/round/new", GameController, :new_round
+    post "/game/round", GameController, :new_round
+    get "/game/round", GameController, :round
   end
 
   # Other scopes may use custom stacks.

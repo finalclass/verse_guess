@@ -10,3 +10,7 @@ config :verse_guess, VerseGuessWeb.Endpoint,
 config :logger, level: :warn
 
 config :verse_guess, :http_client, VerseGuess.HttpClient
+config :verse_guess, :http_client_response_book, "ab"
+config :verse_guess, :http_client_response_chapter_number, 1
+config :verse_guess, :http_client_response_verse_number, 14
+config :verse_guess, :http_client_response_verse_text, "Nie powinieneś był stać na rozstaju dróg, aby wytracić tych, którzy uciekali, ani wydać tych, którzy pozostali spośród nich w dniu ucisku."

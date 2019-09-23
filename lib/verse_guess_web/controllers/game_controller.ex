@@ -44,10 +44,19 @@ defmodule VerseGuessWeb.GameController do
     |> render("new.html")
   end
 
-  def new_round(_conn, _params) do
-    # verse_text = Game.new_round(game_pid)
+  def new_round(conn, _params) do
+    game_pid = Map.get(conn, :game)
+    Game.new_round(game_pid)
+    
+    conn
+    |> redirect(to: Routes.game_path(conn, :round))
+  end
 
-    # conn
-    # |> assign(:verse_text, verse_text)
+  def round(conn, _params) do
+    verse_text = conn |> Map.get(:game) |> Game.get_verse_text()
+    
+    conn
+    |> assign(:verse_text, verse_text)
+    |> render("round.html")
   end
 end
