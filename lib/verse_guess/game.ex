@@ -3,26 +3,26 @@ defmodule VerseGuess.Game do
 
   alias VerseGuess.Bible
 
+  ##########################
+  # Public API
+  ##########################
+  
   def start_link() do
     GenServer.start_link(__MODULE__, %{
-          players: [],
-          book: "",
-          chapter_number: 0,
-          verse_number: 0,
-          verse_text: ""
+      players: [],
+      book: "",
+      chapter_number: 0,
+      verse_number: 0,
+      verse_text: ""
     })
   end
 
-  def init(init_arg), do: {:ok, init_arg}
+  def init(init_arg), do: {:ok, next_round(init_arg)}
 
-  def new_round(game_pid) do
-    GenServer.call(game_pid, {:new_round})
-  end
-  
   def get_players(game_pid) do
     GenServer.call(game_pid, {:get_players})
   end
-  
+
   def add_player(game_pid, player_pid, player_name) do
     GenServer.call(game_pid, {:add_player, player_pid, player_name})
   end
@@ -35,10 +35,14 @@ defmodule VerseGuess.Game do
     GenServer.call(game_pid, {:get_options})
   end
 
-  def next_guess(game_pid) do
-    GenServer.call(game_pid, {:next_guess})
+  def next_stage(game_pid) do
+    GenServer.call(game_pid, {:next_stage})
   end
 
+  ##########################
+  # Handlers
+  ##########################
+  
   def handle_call({:add_player, player_pid, player_name}, _from, state) do
     players = Map.get(state, :players)
     players = [{player_pid, player_name} | players]
@@ -50,19 +54,6 @@ defmodule VerseGuess.Game do
     {:reply, Map.get(state, :players), state}
   end
 
-  def handle_call({:new_round}, _from, state) do
-    verse = Bible.get_random_verse()
-    verse_text = Map.get(verse, :verse_text)
-    state = state
-    |> Map.put(:book, Map.get(verse, :encoded_book_name))
-    |> Map.put(:chapter_number, Map.get(verse, :chapter_number))
-    |> Map.put(:verse_number, Map.get(verse, :verse_number))
-    |> Map.put(:verse_text, verse_text)
-    |> Map.put(:possible_answers, Map.get(verse, :possible_answers))
-
-    {:reply, verse_text, state}
-  end
-
   def handle_call({:get_verse_text}, _from, state) do
     verse_text = Map.get(state, :verse_text)
     {:reply, verse_text, state}
@@ -70,11 +61,38 @@ defmodule VerseGuess.Game do
 
   def handle_call({:get_options}, _from, state) do
     ans = Map.get(state, :possible_answers)
-    {:reply, ans, state}
+    stage = Map.get(state, :stage)
+    options = elem(ans, stage)
+    {:reply, options, state}
   end
 
-  def handle_call({:next_guess}, _from, state) do
-    state = Map.put(state, :possible_answers, ["Prawo", "Pisma", "Prorocy"])
-    {:reply, :ok, state)
+  def handle_call({:next_stage}, _from, state) do
+    current_stage = Map.get(state, :stage)
+    possible_answers = Map.get(state, :possible_answers)
+    state = state |> bump_stage_or_round(current_stage + 1, possible_answers)
+    {:reply, :ok, state}
+  end
+
+  ##########################
+  # Private functions
+  ##########################
+  
+  defp bump_stage_or_round(state, next_stage, possible_answers)
+       when next_stage > length(possible_answers),
+       do: next_round(state)
+
+  defp bump_stage_or_round(state, next_stage, _possible_answers),
+    do: Map.put(state, :stage, next_stage)
+
+  defp next_round(state) do
+    verse = Bible.get_random_verse()
+
+    state
+    |> Map.put(:book, Map.get(verse, :encoded_book_name))
+    |> Map.put(:chapter_number, Map.get(verse, :chapter_number))
+    |> Map.put(:verse_number, Map.get(verse, :verse_number))
+    |> Map.put(:verse_text, Map.get(verse, :verse_text))
+    |> Map.put(:possible_answers, Map.get(verse, :possible_answers))
+    |> Map.put(:stage, 0)
   end
 end

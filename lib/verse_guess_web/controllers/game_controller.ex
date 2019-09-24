@@ -46,7 +46,7 @@ defmodule VerseGuessWeb.GameController do
 
   def new_round(conn, _params) do
     game_pid = Map.get(conn, :game)
-    Game.new_round(game_pid)
+    Game.next_stage(game_pid)
     
     conn
     |> redirect(to: Routes.game_path(conn, :round))
