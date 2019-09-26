@@ -1,3 +1,39 @@
-<h1>
-  <%= @verse_text %>
-</h1>
+<style>
+ .choices {
+     list-style-type: none;
+     display: grid;
+     grid-template-columns: auto auto auto auto auto auto;
+     /*
+     display: flex;
+     flex-wrap: wrap;
+     justify-content: space-between;
+     */
+ }
+
+ .choices li {
+     display: block;
+     margin: 10px;
+ }
+ 
+</style>
+
+<h1><%= @verse_text %></h1>
+<p>Punkty: <%= @points %></p>
+
+<p>
+  Znane:
+</p>
+<p>
+  <%= Enum.join(@known, ", ") %>
+</p>
+
+<h3><%= @choice_name  %></h3>
+
+<ul class="choices">
+
+  <%= @possible_answers |> Enum.with_index() |> Enum.map(fn {ans, i} -> %>
+    <li>
+      <%= button ans, to: Routes.game_path(@conn, :answer, i) %>
+    </li>
+  <% end) %>
+</ul>

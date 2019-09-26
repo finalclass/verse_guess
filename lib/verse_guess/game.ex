@@ -1,7 +1,7 @@
 defmodule VerseGuess.Game do
   use GenServer
-
   alias VerseGuess.Bible
+  alias VerseGuess.Player
 
   ##########################
   # Public API
@@ -39,6 +39,14 @@ defmodule VerseGuess.Game do
     GenServer.call(game_pid, {:next_stage})
   end
 
+  def answer(game_pid, player_pid, answer_index) do
+    GenServer.call(game_pid, {:answer, player_pid, answer_index})
+  end
+
+  def get_known(game_pid) do
+    GenServer.call(game_pid, {:get_known})
+  end
+
   ##########################
   # Handlers
   ##########################
@@ -60,10 +68,7 @@ defmodule VerseGuess.Game do
   end
 
   def handle_call({:get_options}, _from, state) do
-    ans = Map.get(state, :possible_answers)
-    stage = Map.get(state, :stage)
-    options = elem(ans, stage)
-    {:reply, options, state}
+    {:reply, read_options_from_state(state), state}
   end
 
   def handle_call({:next_stage}, _from, state) do
@@ -73,12 +78,41 @@ defmodule VerseGuess.Game do
     {:reply, :ok, state}
   end
 
+  def handle_call({:answer, player_pid, answer_index}, _from, state) do
+    {_, _, _, correct_index} = read_options_from_state(state)
+
+    IO.inspect(corrent_index
+    
+    if answer_index == correct_index do
+      Player.add_point(player_pid)
+    end
+
+    {:reply, :ok, state}
+  end
+
+  def handle_call({:get_known}, _from, state) do
+    stage = Map.get(state, :stage)
+
+    descriptions = state
+    |> Map.get(:possible_answers)
+    |> Enum.take(stage)
+    |> Enum.map(fn {_, _, items, correct} -> Enum.at(items, correct) end)
+
+    {:reply, descriptions, state}
+  end
+
   ##########################
-  # Private functions
+  # Private
   ##########################
+
+  defp read_options_from_state(state) do
+    ans = Map.get(state, :possible_answers)
+    stage = Map.get(state, :stage)
+    Enum.at(ans, stage)
+  end
   
   defp bump_stage_or_round(state, next_stage, possible_answers)
-       when next_stage > length(possible_answers),
+       when next_stage >= length(possible_answers),
        do: next_round(state)
 
   defp bump_stage_or_round(state, next_stage, _possible_answers),

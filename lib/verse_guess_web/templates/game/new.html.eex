@@ -10,5 +10,5 @@
   <% end %>
 </ul>
 
-<%= button "Rozpocznij", to: Routes.game_path(@conn, :new_round) %>
+<%= button "Rozpocznij", method: "get", to: Routes.game_path(@conn, :round) %>
 

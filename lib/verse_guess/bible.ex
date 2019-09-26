@@ -74,34 +74,31 @@ defmodule VerseGuess.Bible do
     [section | get_book(verse, testament, section)]
   end
 
-  defp get_section(verse, {_, _, _, 1}) do # for New Testament
+  defp get_section(verse, {_, _, _, 1} = testament) do # for New Testament
     book = Map.get(verse, :encoded_book_name)
     section_index = case Enum.find_index(@new_testament_books, &(&1 == book)) do
-                      x when x < length(@gospels_books) -> 0
+                      x when x < length(@gospels_books) -> 0 # Gospels
                       x when x == 4 -> 1 # Acts of apostoles
-                      x when x < 4 + length(@letters_books) -> 2
-                      _ -> 3
+                      x when x < 5 + length(@letters_books) -> 2 # Letters
+                      _ -> 3 # Revelation
                     end
-    {:section, "Dział", @new_testament_sections, section_index}
+    section = {:section, "Dział", @new_testament_sections, section_index};
+    [section | get_book(verse, testament, section)]
   end
 
-  defp get_book(verse, {_, _, _, 0}, {_, _, _, 0}) do # Law
+  defp get_book(verse, books) when is_list(books) do
     book = Map.get(verse, :encoded_book_name)
-    book_index = Enum.find_index(@law_books, &(&1 == book))
-    [{:book, "Księga", @law_books, book_index} | get_chapter(verse)]
+    book_index = Enum.find_index(books, &(&1 == book))
+    [{:book, "Księga", books, book_index} | get_chapter(verse)]
   end
 
-  defp get_book(verse, {_, _, _, 0}, {_, _, _, 1}) do # Writings
-    book = Map.get(verse, :encoded_book_name)
-    book_index = Enum.find_index(@writings_books, &(&1 == book))
-    [{:book, "Księga", @writings_books, book_index} | get_chapter(verse)]
-  end
-
-  defp get_book(verse, {_, _, _, 0}, {_, _, _, 2}) do # Prophets
-    book = Map.get(verse, :encoded_book_name)
-    book_index = Enum.find_index(@prophets_books, &(&1 == book))
-    [{:book, "Księga", @prophets_books, book_index} | get_chapter(verse)]
-  end
+  defp get_book(verse, {_, _, _, 0}, {_, _, _, 0}), do: get_book(verse, @law_books)
+  defp get_book(verse, {_, _, _, 0}, {_, _, _, 1}), do: get_book(verse, @writings_books)
+  defp get_book(verse, {_, _, _, 0}, {_, _, _, 2}), do: get_book(verse, @prophets_books)
+  defp get_book(verse, {_, _, _, 1}, {_, _, _, 0}), do: get_book(verse, @gospels_books)
+  defp get_book(verse, {_, _, _, 1}, {_, _, _, 1}), do: get_chapter(verse) # Acts
+  defp get_book(verse, {_, _, _, 1}, {_, _, _, 2}), do: get_book(verse, @letters_books)
+  defp get_book(verse, {_, _, _, 1}, {_, _, _, 3}), do: get_chapter(verse) # Revelation
 
   defp get_chapter(verse) do
     max_chapters = Map.get(verse, :max_chapters)

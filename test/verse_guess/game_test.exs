@@ -10,19 +10,24 @@ defmodule VerseGuess.GameTest do
     %{game_pid: game_pid}
   end
 
-  # test "initializes new round", %{game_pid: game_pid} do
-  #   verse_text = Game.new_(game_pid)
-  #   assert verse_text == Application.get_env(:verse_guess, :http_client_response_verse_text)
-  # end
+  test "simple round", %{game_pid: game_pid} do
+    options = Game.get_options(game_pid)
+    assert options == {:testament, "Testament", ["Stary Testament", "Nowy Testament"], 0}
+  end
 
-  # test "gets options", %{game_pid: game_pid} do
-  #   options = Game.get_options(game_pid)
-  #   assert options == ["Stary Testament", "Nowy Testament"]
-  # end
+  test "next stage", %{game_pid: game_pid} do
+    Game.next_stage(game_pid)
+    options = Game.get_options(game_pid)
+    assert options == {:section, "Dział", ["Prawo", "Pisma", "Prorocy"], 2}
+  end
 
-  # test "changes guess options", %{game_pid: game_pid} do
-  #   Game.next_stage(game_pid)
-  #   options = Game.get_options(game_pid)
-  #   assert options == ["Prawo", "Pisma", "Prorocy"]
-  # end
+  test "next stage goes to new round when finished", %{game_pid: game_pid} do
+    Game.next_stage(game_pid)
+    Game.next_stage(game_pid)
+    Game.next_stage(game_pid)
+    Game.next_stage(game_pid)
+    options = Game.get_options(game_pid)
+    assert options == {:testament, "Testament", ["Stary Testament", "Nowy Testament"], 0}
+  end
+
 end
