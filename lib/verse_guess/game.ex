@@ -81,8 +81,6 @@ defmodule VerseGuess.Game do
   def handle_call({:answer, player_pid, answer_index}, _from, state) do
     {_, _, _, correct_index} = read_options_from_state(state)
 
-    IO.inspect(corrent_index
-    
     if answer_index == correct_index do
       Player.add_point(player_pid)
     end
