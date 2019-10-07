@@ -6,7 +6,7 @@ defmodule VerseGuess.Application do
   use Application
 
   def start(_type, _args) do
-    init_mnesia()
+    # init_mnesia()
     # List all child processes to be supervised
     children = [
       # Start the endpoint when the application starts
@@ -28,13 +28,23 @@ defmodule VerseGuess.Application do
     :ok
   end
 
-  def init_mnesia, do: handle_mnesia_schema_creation(:mnesia.create_schema([node()]))
+  # def init_mnesia, do: handle_mnesia_schema_creation(:mnesia.crearse_guess/
+   verse_guess.ex
+   
+   
+   
+   
+   
+   
+   
+   
+te_schema([node()]))
 
-  def handle_mnesia_schema_creation({:error, {_, {:already_exists, _}}}),
-    do: handle_mnesia_schema_creation(:ok)
+  # def handle_mnesia_schema_creation({:error, {_, {:already_exists, _}}}),
+  #   do: handle_mnesia_schema_creation(:ok)
 
-  def handle_mnesia_schema_creation(:ok) do
-    :mnesia.start()
-    VerseGuess.User.create_mnesia_table();
-  end
+  # def handle_mnesia_schema_creation(:ok) do
+  #   :mnesia.start()
+  #   VerseGuess.User.create_mnesia_table();
+  # end
 end

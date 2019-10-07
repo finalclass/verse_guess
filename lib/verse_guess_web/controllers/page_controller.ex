@@ -21,7 +21,7 @@ defmodule VerseGuessWeb.PageController do
 
   def set_player_name(conn, %{"player_name" => player_name}) do
     {:ok, player_pid} = Player.start_link(player_name)
-
+    
     conn
     |> put_session(:player, player_pid)
     |> put_flash(:info, "Pomyślnie ustawiono nazwę gracza")
