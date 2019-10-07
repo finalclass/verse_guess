@@ -28,17 +28,7 @@ defmodule VerseGuess.Application do
     :ok
   end
 
-  # def init_mnesia, do: handle_mnesia_schema_creation(:mnesia.crearse_guess/
-   verse_guess.ex
-   
-   
-   
-   
-   
-   
-   
-   
-te_schema([node()]))
+  # def init_mnesia, do: handle_mnesia_schema_creation(:mnesia.crearse_guess/te_schema([node()]))
 
   # def handle_mnesia_schema_creation({:error, {_, {:already_exists, _}}}),
   #   do: handle_mnesia_schema_creation(:ok)

@@ -28,7 +28,7 @@ defmodule VerseGuess.User do
 
   @spec validate_password_length(errors, String.t()) :: errors
   defp validate_password_length(errors, password) do
-    if String.length(password),
+    if String.length(password) < 4,
       do: add_error(errors, :password, "password must be at least 4 characters long"),
       else: errors
   end
