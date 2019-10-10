@@ -36,10 +36,16 @@ defmodule VerseGuess.UserTest do
   end
 
   test "passes when params are OK" do
-    assert :ok == User.validate_register(%{
-        "email" => "test@example.com",
-        "password" => "abcdefg",
-        "re_password" => "abcdefg"
-      })
+    assert :ok ==
+             User.validate_register(%{
+               "email" => "test@example.com",
+               "password" => "abcdefg",
+               "re_password" => "abcdefg"
+             })
+  end
+
+  test "saves user" do
+    # result = User.save(%{"email" => "test@example.com", "password" => "abcdef"})
+    
   end
 end

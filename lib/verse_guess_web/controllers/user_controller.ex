@@ -12,6 +12,8 @@ defmodule VerseGuessWeb.UserController do
     case User.validate_register(params) do
       :ok ->
         # TODO create user
+        params
+        |> User.save()
         conn |> redirect(to: Routes.page_path(conn, :index))
 
       {:error, errors} ->
