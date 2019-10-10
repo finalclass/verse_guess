@@ -1,19 +1,17 @@
 defmodule VerseGuess.Db do
+  @server __MODULE__.Server
 
-  @spec save(binary(), tuple()) :: :ok
+  def start_link() do
+    GenServer.start_link(@server, %{}, name: @server)
+  end
+
+  @spec save(atom(), tuple()) :: :ok | {:error, term()}
   def save(table, fields) do
-    ensure_table_exists()
-    # :ets.tabl
+    GenServer.call(@server, {:save, table, fields})
   end
 
-  @spec ensure_table_exists(atom()) :: :ok | :error
-  defp ensure_table_exists(table) do
-    case :dets.info(table) do
-      :undefined ->
-        {:ok, table} = handle_open_table(:dets.open_file(table, [type: :set]))
-        :ok
-      _ -> :ok
-    end
+  @spec get(atom(), term()) :: tuple()
+  def get(table, id) do
+    GenServer.call(@server, {:get, table, id})
   end
-
 end

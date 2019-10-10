@@ -45,7 +45,7 @@ defmodule VerseGuess.UserTest do
   end
 
   test "saves user" do
-    # result = User.save(%{"email" => "test@example.com", "password" => "abcdef"})
+    result = User.save(%{"email" => "test@example.com", "password" => "abcdef"})
     
   end
 end

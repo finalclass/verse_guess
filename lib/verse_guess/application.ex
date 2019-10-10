@@ -10,6 +10,7 @@ defmodule VerseGuess.Application do
     # List all child processes to be supervised
     children = [
       # Start the endpoint when the application starts
+      Supervisor.Spec.supervisor(VerseGuess.Db, []),
       VerseGuessWeb.Endpoint
       # Starts a worker by calling: VerseGuess.Worker.start_link(arg)
       # {VerseGuess.Worker, arg},
