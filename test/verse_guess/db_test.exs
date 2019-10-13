@@ -10,4 +10,11 @@ defmodule VerseGuess.DbTest do
     assert :ok == Db.save(:dbtest, {:my_id, "some-field"})
     assert {:my_id, "some-field"} == Db.get(:dbtest, :my_id) 
   end
+
+  test "can delete" do
+    Db.save(:dbtest, {:my_id})
+    Db.delete(:dbtest, :my_id)
+    assert Db.get(:dbtest, :my_id) == nil
+  end
+  
 end

@@ -13,4 +13,12 @@ defmodule VerseGuess.Db.Server do
   def handle_call({:get, table, id}, _from, state) do
     {:reply, Impl.get(table, id), state}
   end
+
+  def handle_call({:delete, table, id}, _from, state) do
+    {:reply, Impl.delete(table, id), state}
+  end
+
+  def handle_call({:drop, table}, _from, state) do
+    {:reply, Impl.drop(table), state}
+  end
 end

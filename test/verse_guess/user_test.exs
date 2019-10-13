@@ -2,6 +2,14 @@ defmodule VerseGuess.UserTest do
   use ExUnit.Case
   alias VerseGuess.User
 
+  @db Application.get_env(:verse_guess, :db)
+  @table Application.get_env(:verse_guess, :users_table) 
+
+  setup do
+    @db.drop(@table);
+    {:ok, []}
+  end
+  
   test "missing email is reported" do
     {:error, errors} = User.validate_register(%{})
     assert is_list(errors.email)
@@ -44,8 +52,11 @@ defmodule VerseGuess.UserTest do
              })
   end
 
-  test "saves user" do
+  test "saves and removes user" do
     result = User.save(%{"email" => "test@example.com", "password" => "abcdef"})
-    
+    assert result == :ok
+    result = User.delete("test@examile.com")
+    assert result == :ok
   end
+
 end

@@ -40,6 +40,15 @@ defmodule VerseGuess.Validators do
       else: add_error(errors, email_field, "email must contain '@' sign")
   end
 
+  @spec add_error(errors, atom | String.t(), String.t()) :: errors
+  def add_error(errors, key, err_msg) when is_binary(key),
+    do: add_error(errors, String.to_atom(key), err_msg)
+
+  def add_error(errors, key, err_msg) when is_atom(key) do
+    errors = ensure_error_key_exists(errors, key) 
+    Map.put(errors, key, [err_msg | Map.get(errors, key)])
+  end
+  
   ######################
   # Private
   ######################
@@ -47,14 +56,7 @@ defmodule VerseGuess.Validators do
   @spec errors_empty?(errors) :: boolean
   defp errors_empty?(errors), do: Enum.all?(errors, fn {_k, v} -> length(v) == 0 end)
 
-  @spec add_error(errors, atom | String.t(), String.t()) :: errors
-  defp add_error(errors, key, err_msg) when is_binary(key),
-    do: add_error(errors, String.to_atom(key), err_msg)
-
-  defp add_error(errors, key, err_msg) when is_atom(key) do
-    errors = ensure_error_key_exists(errors, key) 
-    Map.put(errors, key, [err_msg | Map.get(errors, key)])
-  end
+  
 
   @spec ensure_error_key_exists(errors, atom) :: errors
   defp ensure_error_key_exists(errors, key) do

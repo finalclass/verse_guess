@@ -10,8 +10,18 @@ defmodule VerseGuess.Db do
     GenServer.call(@server, {:save, table, fields})
   end
 
-  @spec get(atom(), term()) :: tuple()
+  @spec get(atom(), term()) :: tuple() | nil
   def get(table, id) do
     GenServer.call(@server, {:get, table, id})
+  end
+
+  @spec delete(atom(), term()) :: :ok | {:error, term()}
+  def delete(table, id) do
+    GenServer.call(@server, {:delete, table, id})
+  end
+
+  @spec drop(atom()) :: :ok
+  def drop(table) do
+    GenServer.call(@server, {:drop, table}) 
   end
 end

@@ -25,6 +25,9 @@ config :phoenix, :json_library, Jason
 config :verse_guess, :random_verse_url, "http://ubg.cienieprzyszlosci.pl/random"
 config :verse_guess, :http_client, HTTPoison
 
+config :verse_guess, :db, VerseGuess.Db
+config :verse_guess, :users_table, :users
+
 # Import environment specific config. This must remain at the bottom
 # of this file so it overrides the configuration defined above.
 import_config "#{Mix.env()}.exs"
