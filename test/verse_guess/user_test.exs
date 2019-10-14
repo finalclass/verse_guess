@@ -53,7 +53,7 @@ defmodule VerseGuess.UserTest do
   end
 
   test "saves and removes user" do
-    result = User.save(%{"email" => "test@example.com", "password" => "abcdef"})
+    result = User.create_new("test@example.com", "abcdef")
     assert result == :ok
     result = User.delete("test@examile.com")
     assert result == :ok

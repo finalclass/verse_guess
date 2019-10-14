@@ -28,6 +28,8 @@ config :verse_guess, :http_client, HTTPoison
 config :verse_guess, :db, VerseGuess.Db
 config :verse_guess, :users_table, :users
 
+config :sendgrid, api_key: "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"
+
 # Import environment specific config. This must remain at the bottom
 # of this file so it overrides the configuration defined above.
 import_config "#{Mix.env()}.exs"

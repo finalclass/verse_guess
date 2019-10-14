@@ -9,20 +9,20 @@ defmodule VerseGuessWeb.UserController do
   end
 
   def create(conn, params) do
-    case User.validate_register(params) do
-      :ok ->
-        # TODO create user
-        params
-        |> User.save()
+    conn |> handle_registration_validation(params, User.validate_register(params))
+  end
 
-        conn
-        |> redirect(to: Routes.page_path(conn, :index))
+  defp handle_registration_validation(conn, params, :ok) do
+    :ok = User.create_new(params["email"], params["password"])
 
-      {:error, errors} ->
-        conn
-        |> assign(:errors, errors)
-        |> render("new_form.html")
-    end
+    conn
+    |> redirect(to: Routes.page_path(conn, :index))
+  end
+
+  defp handle_registration_validation(conn, _params, {:errors, errors}) do
+    conn
+    |> assign(:errors, errors)
+    |> render("new_form.html")
   end
 
   def login_form(conn, _params) do

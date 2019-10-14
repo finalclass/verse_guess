@@ -39,6 +39,7 @@ defmodule VerseGuess.MixProject do
       {:jason, "~> 1.0"},
       {:plug_cowboy, "~> 2.0"},
       {:httpoison, "~> 1.5"},
+      {:sendgrid, "~> 2.0"},
       
       {:phoenix_live_reload, "~> 1.2", only: :dev},
       {:dialyxir, "~> 1.0.0-rc.7", only: [:dev], runtime: false}

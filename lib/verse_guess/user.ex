@@ -18,11 +18,11 @@ defmodule VerseGuess.User do
     |> validation_response()
   end
 
-  @spec save(params) :: :ok
-  def save(params) do
-    @db.save(@table, {params["email"], params["password"]})
+  @spec create_new(binary(), binary()) :: :ok
+  def create_new(email, password) do
+    @db.save(@table, {email, password, :registered})
   end
-
+  
   @spec delete(binary()) :: :ok
   def delete(email) do
     @db.delete(@table, email)
